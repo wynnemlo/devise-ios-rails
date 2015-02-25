@@ -10,4 +10,9 @@ FactoryGirl.define do
       remember_created_at { Time.now }
     end
   end
+
+  factory :oauth_user, class: User do
+    provider 'facebook'
+    uid { rand(1000..9999) }
+  end
 end

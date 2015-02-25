@@ -3,12 +3,14 @@ module DeviseIosRails
     respond_to :json
 
     def facebook
-      user = User.create(
-        email:    params[:user][:email],
-        uid:      params[:user][:uid],
-        provider: params[:user][:provider]
-      )
+      user = User.from_oauth(user_params)
       respond_with user
+    end
+
+    private
+
+    def user_params
+      params.require(:user).permit(:email, :provider, :uid)
     end
   end
 end

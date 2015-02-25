@@ -3,11 +3,5 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  def password_required?
-    super && provider.blank?
-  end
-
-  def email_required?
-    super && password_required?
-  end
+  include DeviseIosRails::OAuth
 end
