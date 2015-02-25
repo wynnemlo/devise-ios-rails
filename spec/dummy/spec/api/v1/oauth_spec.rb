@@ -8,7 +8,6 @@ describe 'OAuth' do
     let(:params) do
       {
         user: {
-          email: 'user@example.com',
           provider: 'facebook',
           oauth_token: 'token',
           uid: '1234'

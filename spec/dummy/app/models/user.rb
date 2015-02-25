@@ -6,4 +6,8 @@ class User < ActiveRecord::Base
   def password_required?
     super && provider.blank?
   end
+
+  def email_required?
+    super && password_required?
+  end
 end
