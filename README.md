@@ -56,6 +56,43 @@ class SecretSpacesController < ApplicationController
 end
 ```
 
+Facebook
+========
+
+To sign in using Facebook include DeviseIosRails::Oauth in your model after the devise method:
+
+```ruby
+class User < ActiveRecord::Base
+  acts_as_token_authenticatable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+
+  include DeviseIosRails::OAuth
+end
+```
+
+Add required fields to the model (keep in mind that you might not get e-mail address from the provider):
+
+```ruby
+class AddOauthToUsers < ActiveRecord::Migration
+  def change
+    add_column :users, :uid, :string
+    add_column :users, :provider, :string
+    add_column :users, :oauth_token, :string
+
+    change_column :users, :email, :string, :null => true
+  end
+end
+```
+
+And update routes:
+
+```ruby
+devise_scope :user do
+  post 'auth/facebook', to: 'devise_ios_rails/oauth#facebook'
+end
+```
+
 Example app
 ===========
 
