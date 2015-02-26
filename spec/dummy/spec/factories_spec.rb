@@ -1,5 +1,7 @@
 FactoryGirl.factories.each do |factory|
   describe "The #{factory.name} factory" do
+    before { stub_successful_facebook_request }
+
     it 'is valid' do
       object = build(factory.name)
       if object.methods.include? :valid?

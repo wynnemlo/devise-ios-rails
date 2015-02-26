@@ -13,6 +13,7 @@ FactoryGirl.define do
 
   factory :oauth_user, class: User do
     provider 'facebook'
+    oauth_token 'valid_token'
     uid { rand(1000..9999) }
   end
 end

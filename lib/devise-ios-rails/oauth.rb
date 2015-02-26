@@ -2,6 +2,7 @@ module DeviseIosRails
   module OAuth
     def self.included receiver
       receiver.extend ClassMethods
+      receiver.validate :oauth_token_valid, unless: 'provider.blank?'
     end
 
     def email_required?
@@ -10,6 +11,13 @@ module DeviseIosRails
 
     def password_required?
       super && provider.blank?
+    end
+
+    def oauth_token_valid
+      graph = Koala::Facebook::API.new oauth_token
+      graph.get_object 'me'
+    rescue Koala::Facebook::AuthenticationError => e
+      errors.add :oauth_token, e.fb_error_message
     end
 
     module ClassMethods
