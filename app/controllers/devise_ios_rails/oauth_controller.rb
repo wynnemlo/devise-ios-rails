@@ -4,9 +4,12 @@ module DeviseIosRails
 
     respond_to :json
 
-    def facebook
+    def all
       respond_with User.from_oauth(user_params)
     end
+
+    alias_method :facebook, :all
+    alias_method :google,   :all
 
     private
 

@@ -14,10 +14,23 @@ module DeviseIosRails
     end
 
     def oauth_token_valid
+      send "validate_#{provider}_token"
+    end
+
+    def validate_facebook_token
       graph = Koala::Facebook::API.new oauth_token
       graph.get_object 'me'
     rescue Koala::Facebook::AuthenticationError => e
       errors.add :oauth_token, e.fb_error_message
+    end
+
+    def validate_google_token
+      conn = Faraday.new url: 'https://www.googleapis.com'
+      resp = conn.get "/oauth2/v1/tokeninfo?access_token=#{oauth_token}"
+      if resp.status == 400
+        error_description = JSON.parse(resp.body)['error_description']
+        errors.add :oauth_token, error_description
+      end
     end
 
     module ClassMethods
