@@ -1,6 +1,8 @@
 class OauthTokenValidator < ActiveModel::Validator
   def validate(record)
     send "validate_#{record.provider}_token", record
+  rescue Faraday::ConnectionFailed, Faraday::TimeoutError
+    record.errors.add :oauth_token, 'could not check token authenticity'
   end
 
   private
