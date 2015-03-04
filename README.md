@@ -81,6 +81,8 @@ class AddOauthToUsers < ActiveRecord::Migration
     add_column :users, :oauth_token, :string
 
     change_column :users, :email, :string, :null => true
+
+    add_index :users, [:uid, :provider], unique: true
   end
 end
 ```
