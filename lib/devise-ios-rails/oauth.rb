@@ -3,7 +3,8 @@ module DeviseIosRails
     def self.included receiver
       receiver.extend ClassMethods
       receiver.validates_with OauthTokenValidator, unless: 'provider.blank?'
-      receiver.validates :uid, uniqueness: { scope: :provider }
+      receiver.validates :uid, uniqueness: { scope: :provider },
+                               allow_nil: true, allow_blank: true
     end
 
     def email_required?
