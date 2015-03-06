@@ -2,7 +2,7 @@ class AddOauthEmailToUsers < ActiveRecord::Migration
   def up
     add_column :users, :oauth_email, :string
 
-    User.all.each do |user|
+    User.find_each do |user|
       if user.provider
         user.update_columns oauth_email: user.email, email: ''
       end
@@ -10,7 +10,7 @@ class AddOauthEmailToUsers < ActiveRecord::Migration
   end
 
   def down
-    User.all.each do |user|
+    User.find_each do |user|
       if user.provider
         user.update_columns email: user.oauth_email
       end
