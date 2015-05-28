@@ -1,11 +1,11 @@
 module DeviseIosRails
-  class OauthController < ApplicationController
+  class OauthController < DeviseController
     skip_before_action :verify_authenticity_token
 
     respond_to :json
 
     def all
-      respond_with User.from_oauth(user_params)
+      respond_with resource_class.from_oauth(resource_params)
     end
 
     alias_method :facebook, :all
@@ -13,8 +13,8 @@ module DeviseIosRails
 
     private
 
-    def user_params
-      params.require(:user).permit(:email, :provider, :uid, :oauth_token)
+    def resource_params
+      params.require(resource_name).permit(:email, :provider, :uid, :oauth_token)
     end
   end
 end

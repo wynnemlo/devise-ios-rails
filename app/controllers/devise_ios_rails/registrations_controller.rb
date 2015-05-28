@@ -1,14 +1,17 @@
 module DeviseIosRails
   class RegistrationsController < Devise::RegistrationsController
-    acts_as_token_authentication_handler_for User
-    skip_before_filter :authenticate_user_from_token!, only: %i(new create cancel)
+    Devise.mappings.keys.each do |key|
+      acts_as_token_authentication_handler_for Object.const_get(key.to_s.classify)
+      skip_before_filter :"authenticate_#{key.to_s}_from_token!", only: %i(new create cancel)
+    end
+
     def authenticate_scope!
       send(:"authenticate_#{resource_name}_from_token!")
       self.resource = send(:"current_#{resource_name}")
     end
 
     def after_update_path_for(resource)
-      edit_user_registration_url
+      send :"edit_#{resource_name}_registration_url"
     end
 
     def update_resource(resource, params)

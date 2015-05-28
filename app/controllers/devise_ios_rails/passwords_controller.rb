@@ -9,10 +9,9 @@ module DeviseIosRails
         format.html { super }
         format.json do
           super and return if authenticate_entity_from_token!(entity).nil?
-
           user = DeviseIosRails::ChangePasswordService.new(
             send("current_#{resource_name}"),
-            params[:user]
+            params[resource_name]
           ).call!
 
           respond_with user
