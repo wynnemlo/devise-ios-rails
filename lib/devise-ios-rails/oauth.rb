@@ -18,8 +18,7 @@ module DeviseIosRails
 
     module ClassMethods
       def from_oauth attributes
-        email = attributes.email
-        if existing_user = User.where(email: email).first
+        if existing_user = User.where(attributes.slice(:email)).first
           return existing_user
         else 
           where(attributes.slice(:uid, :provider)).first_or_create do |user|
